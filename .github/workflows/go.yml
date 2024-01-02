@@ -1,0 +1,32 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v4
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.21.5
+      id: go
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+
+    - name: Build
+      run: |
+        ./build.sh build
+
+    - name: Test
+      run: go test -v .
